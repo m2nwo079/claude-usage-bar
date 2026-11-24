@@ -2,18 +2,42 @@ import SwiftUI
 
 @main
 struct ClaudeUsageBarApp: App {
+    // Created once and kept alive for the whole app
+    @State private var store = UsageStore()
+
     var body: some Scene {
-        // A menu bar item instead of a regular window
-        MenuBarExtra("Claude Usage", systemImage: "gauge.medium") {
-            Text("Hello from the menu bar")
-
-            Divider()
-
-            // Menu bar apps have no Dock icon, so they need their own Quit button
-            Button("Quit") {
-                NSApplication.shared.terminate(nil)
-            }
-            .keyboardShortcut("q")
+        MenuBarExtra {
+            UsageMenuContent(store: store)
+        } label: {
+            // Text shown in the menu bar itself
+            Text(store.menuBarTitle)
         }
+    }
+}
+
+// Items shown when the menu bar item is clicked
+struct UsageMenuContent: View {
+    let store: UsageStore
+
+    var body: some View {
+        Text(store.detailText(title: "5-hour", window: store.state?.fiveHour))
+        Text(store.detailText(title: "Weekly", window: store.state?.sevenDay))
+
+        Divider()
+
+        Text(store.updatedText)
+
+        Button("Refresh") {
+            store.reload()
+        }
+        .keyboardShortcut("r")
+
+        Divider()
+
+        // Menu bar apps have no Dock icon, so they need their own Quit button
+        Button("Quit") {
+            NSApplication.shared.terminate(nil)
+        }
+        .keyboardShortcut("q")
     }
 }
