@@ -57,11 +57,6 @@ final class UsageStore {
         }
     }
 
-    // Short text shown directly in the menu bar, e.g. "5h 92% · 7d 69%"
-    var menuBarTitle: String {
-        guard let state else { return "Claude --" }
-        return "5h \(percentText(state.fiveHour)) · 7d \(percentText(state.sevenDay))"
-    }
 
     // One line in the dropdown menu for a single window
     func detailText(title: String, window: UsageWindow?) -> String {

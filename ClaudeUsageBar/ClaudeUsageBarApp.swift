@@ -7,14 +7,9 @@ struct ClaudeUsageBarApp: App {
     @State private var store = UsageStore()
 
     var body: some Scene {
-        MenuBarExtra {
+        // Only the icon appears in the menu bar; the title is used for accessibility
+        MenuBarExtra("Claude Usage", systemImage: "gauge.with.dots.needle.50percent") {
             UsageMenuContent(store: store)
-        } label: {
-            // Icon and usage text shown together in the menu bar
-            HStack(spacing: 4) {
-                Image(systemName: "gauge.with.dots.needle.50percent")
-                Text(store.menuBarTitle)
-            }
         }
     }
 }
