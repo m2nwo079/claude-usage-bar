@@ -9,8 +9,11 @@ struct ClaudeUsageBarApp: App {
         MenuBarExtra {
             UsageMenuContent(store: store)
         } label: {
-            // Text shown in the menu bar itself
-            Text(store.menuBarTitle)
+            // Icon and usage text shown together in the menu bar
+            HStack(spacing: 4) {
+                Image(systemName: "gauge.with.dots.needle.50percent")
+                Text(store.menuBarTitle)
+            }
         }
     }
 }
