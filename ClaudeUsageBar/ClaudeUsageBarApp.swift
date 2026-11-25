@@ -8,7 +8,7 @@ struct ClaudeUsageBarApp: App {
 
     var body: some Scene {
         // Only the icon appears in the menu bar; the title is used for accessibility
-        MenuBarExtra("Claude Usage", systemImage: "gauge.with.dots.needle.50percent") {
+        MenuBarExtra("Claude Usage", systemImage: store.menuBarSymbol) {
             UsageMenuContent(store: store)
         }
     }

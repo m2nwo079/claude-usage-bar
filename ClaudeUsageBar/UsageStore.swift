@@ -67,6 +67,33 @@ final class UsageStore {
         return "\(title): \(percentText(window)) used · resets \(resetText(window.resetsAt))"
     }
 
+    // Gauge icon for the menu bar, based on whichever limit is closer to full
+    var menuBarSymbol: String {
+        let percentages = [state?.fiveHour, state?.sevenDay]
+            .compactMap { $0 }
+            .filter { !$0.hasReset(now: now) }
+            .map { $0.usedPercentage }
+
+        // No data or both windows have reset
+        guard let highest = percentages.max() else {
+            return "gauge.with.dots.needle.0percent"
+        }
+
+        // Pick the gauge whose needle is closest to the actual percentage
+        switch highest {
+        case ..<17:
+            return "gauge.with.dots.needle.0percent"
+        case ..<42:
+            return "gauge.with.dots.needle.33percent"
+        case ..<59:
+            return "gauge.with.dots.needle.50percent"
+        case ..<84:
+            return "gauge.with.dots.needle.67percent"
+        default:
+            return "gauge.with.dots.needle.100percent"
+        }
+    }
+    
     // How long ago the bridge script last wrote the file
     var updatedText: String {
         guard let state else { return errorMessage ?? "No data yet" }
