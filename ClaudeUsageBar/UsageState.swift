@@ -1,7 +1,7 @@
 import Foundation
 
-// Matches the JSON written by usage-bridge.sh
-struct UsageState: Decodable {
+// Usage numbers from either the bridge file or the usage API
+nonisolated struct UsageState: Decodable {
     let updatedAt: Date
     let fiveHour: UsageWindow?
     let sevenDay: UsageWindow?
@@ -15,9 +15,10 @@ struct UsageState: Decodable {
 }
 
 // One rate limit window (5-hour or 7-day)
-struct UsageWindow: Decodable {
+nonisolated struct UsageWindow: Decodable {
     let usedPercentage: Double
-    let resetsAt: Date
+    // nil when the window has not started counting down yet
+    let resetsAt: Date?
 
     enum CodingKeys: String, CodingKey {
         case usedPercentage = "used_percentage"
@@ -26,6 +27,9 @@ struct UsageWindow: Decodable {
 
     // True once the reset time has passed, so the saved percentage is outdated
     func hasReset(now: Date) -> Bool {
-        now >= resetsAt
+        guard let resetsAt else {
+            return false
+        }
+        return now >= resetsAt
     }
 }

@@ -28,9 +28,14 @@ struct UsageMenuContent: View {
         Divider()
 
         Text(store.updatedText)
+        
+        // Shown only while the API is failing; the bridge file is used meanwhile
+        if let apiError = store.apiError {
+            Text("API: \(apiError)")
+        }
 
         Button("Refresh") {
-            store.reload()
+            store.reload(force: true)
         }
         .keyboardShortcut("r")
 
